@@ -35,6 +35,11 @@ class DependentDropdownField extends DropdownField
     /**
      * @var
      */
+    protected $dependsOnForm;
+
+    /**
+     * @var
+     */
     protected $unselected;
 
     /**
@@ -71,7 +76,12 @@ class DependentDropdownField extends DropdownField
         $response = new HTTPResponse();
         $response->addHeader('Content-Type', 'application/json');
 
-        $items = call_user_func($this->sourceCallback, $request->getVar('val'));
+        if ($this->dependsOnForm) {
+            $items = call_user_func($this->sourceCallback, $request->getVars());
+        } else {
+            $items = call_user_func($this->sourceCallback, $request->getVar('val'));        
+        }
+
         $results = [];
         if ($items) {
             foreach ($items as $k => $v) {
@@ -106,6 +116,25 @@ class DependentDropdownField extends DropdownField
     /**
      * @return mixed
      */
+    public function getDependsOnForm()
+    {
+        return $this->depends;
+    }
+
+    /**
+     * @param bool $isDependent
+     * @return $this
+     */
+    public function setDependsOnForm(bool $isDependent)
+    {
+        $this->dependsOnForm = $isDependent;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getUnselectedString()
     {
         return $this->unselected;
@@ -127,7 +156,11 @@ class DependentDropdownField extends DropdownField
      */
     public function getSource()
     {
-        $val = $this->depends->Value();
+        $val = null;
+
+        if ($this->depends) {
+            $val = $this->depends->Value();
+        }
 
         if (
             !$val
@@ -180,6 +213,7 @@ class DependentDropdownField extends DropdownField
 
         $this->setAttribute('data-link', $this->Link('load'));
         $this->setAttribute('data-depends', $this->getDepends()->getName());
+        $this->setAttribute('data-depends-form', $this->getDependsOnForm());
         $this->setAttribute('data-empty', $this->getEmptyString());
         $this->setAttribute('data-unselected', $this->getUnselectedString());
 
