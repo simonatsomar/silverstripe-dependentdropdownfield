@@ -21,7 +21,7 @@ jQuery.entwine("dependentdropdown", function ($) {
 			depends.change(function () {
 				if (dependsForm) {
 					drop.updateOptions(
-						$.param(this.serializeArray())
+						$.param($(this).serializeArray())
 					);
 				} else if (!this.value) {
 					drop.disable(drop.data('unselected'));
