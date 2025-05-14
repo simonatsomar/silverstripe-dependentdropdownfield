@@ -35,6 +35,7 @@ jQuery.entwine("dependentdropdown", function ($) {
 			});
 		},
 		updateOptions: function(formData) {
+			var drop = this;
 			$.get(
 				drop.data('link'),
 				formData,
