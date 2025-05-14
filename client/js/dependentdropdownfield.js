@@ -20,7 +20,7 @@ jQuery.entwine("dependentdropdown", function ($) {
 
 			depends.change(function () {
 				if (dependsForm) {
-					updateOptions(
+					drop.updateOptions(
 						$.param(this.serializeArray())
 					);
 				} else if (!this.value) {
@@ -28,7 +28,7 @@ jQuery.entwine("dependentdropdown", function ($) {
 				} else {
 					drop.disable("Loading...");
 
-					updateOptions({
+					drop.updateOptions({
 						val: this.value
 					});
 				}				
